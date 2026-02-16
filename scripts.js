@@ -31,17 +31,17 @@ const AllPrdouctsData = () => {
 
 
 const ShowCaterogries = (categories) =>{
-  // console.log(categories);
   const CategoriesItem = document.getElementById("Categories-Item")
-  // console.log(CategoriesItem);
   CategoriesItem.innerHTML = ""
+
   categories.map((catergory) => {
     const CategoriesDiv = document.createElement("div")
-    CategoriesDiv.innerHTML = `<button onClick="ClickCatergory('${catergory.replace(/'/g,"\\'")}')" class="px-5 py-1 rounded-lg border-1 hover:bg-indigo-600 hover:text-white font-semibold">${catergory}</button>
+    CategoriesDiv.innerHTML = `<button onClick="ClickCatergory('${catergory.replace(/'/g,"\\'")}')" class="px-5 py-1 product-btn rounded-lg border-1 hover:bg-indigo-600 hover:text-white font-semibold">${catergory}</button>
 `
     CategoriesItem.appendChild(CategoriesDiv)
 
   })
+
 }
 
 const AllProducts = (products) => {
@@ -70,7 +70,7 @@ const AllProducts = (products) => {
           </p>
           <p class="font-bold mb-5">$${product.price}</p>
           <div class="flex justify-between">
-            <button class="btn w-2/5"><i class="fa-regular fa-eye"></i> Details</button>
+            <button onclick="my_modal_5.showModal()" class="btn w-2/5"><i class="fa-regular fa-eye"></i> Details</button>
             <button class="btn btn-primary w-2/5"><i class="fa-solid fa-cart-shopping"></i> Add</button>
           </div>
         </div>
@@ -108,7 +108,7 @@ const TrndingProducts = (products) => {
           </p>
           <p class="font-bold mb-5">$${product.price}</p>
           <div class="flex justify-between">
-            <button class="btn w-2/5"><i class="fa-regular fa-eye"></i> Details</button>
+            <button onclick="my_modal_5.showModal()" class="btn w-2/5"><i class="fa-regular fa-eye"></i> Details</button>
             <button class="btn btn-primary w-2/5"><i class="fa-solid fa-cart-shopping"></i> Add</button>
           </div>
         </div>
