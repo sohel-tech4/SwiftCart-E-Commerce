@@ -28,10 +28,30 @@ const TrndingProducts = (products) => {
 
   TopProducts.map((product) => {
     const TrendingDiv = document.createElement("div");
-    TrendingDiv.innerHTML = `<div>
-                <h3>${product.title}</h3>
-                <p>Rating: ${product.rating.rate}</p>
-            </div>`;
+    TrendingDiv.innerHTML = `      
+        <div class="card bg-base-100 w-96 shadow-md">
+        <figure class="md:w-full bg-slate-200 py-5 h-72 overflow-hidden flex justify-center items-center">
+          <img
+          class="max-h-full max-w-full object-contain"
+            src=${product.image}
+            alt="Shoes"
+          />
+        </figure>
+        <div class="p-3">
+          <div class="flex justify-between">
+            <h2 class="text-indigo-600 bg-slate-200 rounded-full px-2 font-bold">${product.category}</h2>
+            <p><i class="fa-solid text-yellow-500 fa-star"></i> ${product.rating.rate} (${product.rating.count})</p>
+          </div>
+          <p class="my-3 truncate font-bold">
+            ${product.description}
+          </p>
+          <p class="font-bold mb-5">$${product.price}</p>
+          <div class="flex justify-between">
+            <button class="btn w-2/5"><i class="fa-regular fa-eye"></i> Details</button>
+            <button class="btn btn-primary w-2/5"><i class="fa-solid fa-cart-shopping"></i> Add</button>
+          </div>
+        </div>
+      </div>`;
     TrendingItems.appendChild(TrendingDiv);
   });
 };
