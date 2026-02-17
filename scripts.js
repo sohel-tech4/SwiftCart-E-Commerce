@@ -2,8 +2,7 @@ const loadProducts = () => {
   const url = "https://fakestoreapi.com/products";
   fetch(url)
     .then((res) => res.json())
-    .then((products) => TrndingProducts(products)
-  );
+    .then((products) => TrndingProducts(products));
 };
 
 const loadCategories = () => {
@@ -13,39 +12,109 @@ const loadCategories = () => {
     .then((categories) => ShowCaterogries(categories));
 };
 
-
-const ClickCatergory = (category) =>{
-   const url = `https://fakestoreapi.com/products/category/${category}`;
-  fetch(url)
-    .then((res) => res.json())
-    .then((data) => AllProducts(data));
-}
-
 const AllPrdouctsData = () => {
   const url = "https://fakestoreapi.com/products";
   fetch(url)
     .then((res) => res.json())
-    .then((products) => AllProducts(products)
-  );
+    .then((products) => AllProducts(products));
 };
 
+const removeActive = () => {
+  const catetoryBtn = document.querySelectorAll(".product-btn");
+  catetoryBtn.forEach((btn) => btn.classList.remove("active"));
+};
 
-const ShowCaterogries = (categories) =>{
-  const CategoriesItem = document.getElementById("Categories-Item")
-  CategoriesItem.innerHTML = ""
+const ClickCatergory = (category) => {
+  let url = "";
 
-  categories.map((catergory) => {
-    const CategoriesDiv = document.createElement("div")
-    CategoriesDiv.innerHTML = `<button onClick="ClickCatergory('${catergory.replace(/'/g,"\\'")}')" class="px-5 py-1 product-btn rounded-lg border-1 hover:bg-indigo-600 hover:text-white font-semibold">${catergory}</button>
-`
-    CategoriesItem.appendChild(CategoriesDiv)
+  if (category == "All") {
+    url = "https://fakestoreapi.com/products";
+  } else {
+    url = `https://fakestoreapi.com/products/category/${category}`;
+  }
 
-  })
+  fetch(url)
+    .then((res) => res.json())
+    .then((data) => {
+      removeActive();
+      const clickBtn = document.getElementById(category);
+      if (clickBtn) {
+        clickBtn.classList.add("active");
+      }
 
-}
+      AllProducts(data);
+    });
+};
+
+const ShowCaterogries = (categories) => {
+  const CategoriesItem = document.getElementById("Categories-Item");
+  CategoriesItem.innerHTML = "";
+
+  const defaultDiv = document.createElement("div");
+  defaultDiv.innerHTML = `<button id="All" onClick="ClickCatergory('All')" class="px-5 py-1 product-btn rounded-lg border-1 hover:bg-indigo-600 hover:text-white active font-semibold">All</button>`;
+  CategoriesItem.appendChild(defaultDiv);
+
+  categories.forEach((catergory) => {
+    const CategoriesDiv = document.createElement("div");
+    CategoriesDiv.innerHTML = `<button id="${catergory}" onClick="ClickCatergory('${catergory.replace(/'/g, "\\'")}')" class="px-5 py-1 product-btn rounded-lg border-1 hover:bg-indigo-600 hover:text-white font-semibold">${catergory}</button>
+`;
+    CategoriesItem.appendChild(CategoriesDiv);
+  });
+};
+
+const loadProductDetail = async (id) => {
+  const url = `https://fakestoreapi.com/products/${id}`;
+  const res = await fetch(url);
+  const details = await res.json();
+  displayProductDetails(details);
+};
+
+const displayProductDetails = (details) => {
+  console.log(details);
+  const detailsProduct = document.getElementById("details-container");
+  detailsProduct.innerHTML = "";
+
+  document.getElementById("details_modal").showModal();
+  detailsProduct.innerHTML = `
+      <div class="bg-base-100">
+              <figure
+                class="md:w-full bg-slate-200 py-5 h-72 overflow-hidden flex justify-center items-center"
+              >
+                <img
+                  class="max-h-full max-w-full object-contain"
+                  src="${details.image}"
+                  alt="Shoes"
+                />
+              </figure>
+              <div class="p-3">
+                <div class="">
+                  <h2
+                    class="font-bold text-2xl"
+                  >
+                    ${details.title}
+                  </h2>
+                  <h2
+                    class="font-bold text-xl mt-5"
+                  >
+                    <span class="underline text-xl">Category:</span> ${details.category}
+                  </h2>
+                  
+                </div>
+                <p class="my-3 text-lg font-semibold "><span class="underline">Details:</span> <br> ${details.description}</p>
+                <p class="font-bold text-xl mb-5"><span class="">Price:</span> ${details.price}$</p>
+                <div class="flex justify-between">
+                  <p>
+                    <i class="fa-solid text-yellow-500 fa-star"></i>
+                    ${details.rating.rate} (${details.rating.count})
+                  </p>
+                  <button class="btn btn-primary w-2/5"><i class="fa-solid fa-cart-shopping"></i>ADD TO CART</button>
+                </div>
+              </div>
+            </div>
+    `;
+};
 
 const AllProducts = (products) => {
-
   const AllProducts = document.getElementById("All-Products");
   AllProducts.innerHTML = "";
 
@@ -70,7 +139,7 @@ const AllProducts = (products) => {
           </p>
           <p class="font-bold mb-5">$${product.price}</p>
           <div class="flex justify-between">
-            <button onclick="my_modal_5.showModal()" class="btn w-2/5"><i class="fa-regular fa-eye"></i> Details</button>
+            <button onclick="loadProductDetail(${product.id})" class="btn w-2/5"><i class="fa-regular fa-eye"></i> Details</button>
             <button class="btn btn-primary w-2/5"><i class="fa-solid fa-cart-shopping"></i> Add</button>
           </div>
         </div>
@@ -108,7 +177,7 @@ const TrndingProducts = (products) => {
           </p>
           <p class="font-bold mb-5">$${product.price}</p>
           <div class="flex justify-between">
-            <button onclick="my_modal_5.showModal()" class="btn w-2/5"><i class="fa-regular fa-eye"></i> Details</button>
+            <button onclick="loadProductDetail(${product.id})" class="btn w-2/5"><i class="fa-regular fa-eye"></i> Details</button>
             <button class="btn btn-primary w-2/5"><i class="fa-solid fa-cart-shopping"></i> Add</button>
           </div>
         </div>
@@ -117,8 +186,6 @@ const TrndingProducts = (products) => {
   });
 };
 
-
-
 loadProducts();
-loadCategories()
-AllPrdouctsData()
+loadCategories();
+AllPrdouctsData();
